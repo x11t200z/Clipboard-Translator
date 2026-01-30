@@ -200,6 +200,14 @@ class TranslatorApp:
             one_line_text = one_line_text[:247] + "..."
             
         self.overlay_label.config(text=one_line_text)
+        
+        # Đảm bảo hiển thị nếu đang bị ẩn
+        self.overlay_window.deiconify()
+
+    def hide_overlay_translation(self):
+        """Ẩn overlay cho đến khi có bản dịch mới"""
+        if self.overlay_window:
+            self.overlay_window.withdraw()
 
     def create_overlay(self):
         if self.overlay_window and tk.Toplevel.winfo_exists(self.overlay_window): return
@@ -218,7 +226,15 @@ class TranslatorApp:
         self.overlay_label = tk.Label(self.overlay_window, text="Sẵn sàng...", 
                                    font=("Segoe UI", 11, "bold"), fg="#FFFFFF", bg="#1C1C1C",
                                    anchor="w", padx=20)   
-        self.overlay_label.pack(fill="both", expand=True)
+        self.overlay_label.pack(side="left", fill="both", expand=True)
+        
+        # Nút đóng (X)
+        close_btn = tk.Button(self.overlay_window, text="✕", 
+                            font=("Segoe UI", 10), bg="#1C1C1C", fg="#AAAAAA",
+                            activebackground="#333333", activeforeground="#FF5252",
+                            bd=0, cursor="hand2", width=4,
+                            command=self.hide_overlay_translation)
+        close_btn.pack(side="right", fill="y")
 
 if __name__ == "__main__":
     root = tk.Tk()
